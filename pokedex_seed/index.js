@@ -22,15 +22,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander = __importStar(require("commander"));
+const generate_natures_1 = __importDefault(require("./services/generate_natures"));
 const program = new commander.Command();
 program.version('0.0.0');
 program.parse(process.argv);
 program
-    .command('say-hello')
+    .command('generate-seeds')
     .description('Prints a friendly greeting')
     .action(() => {
-    console.log('Hello, world!');
+    (0, generate_natures_1.default)();
 });
 program.parse(process.argv);
