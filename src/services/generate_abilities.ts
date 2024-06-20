@@ -1,19 +1,12 @@
-import { load } from 'cheerio';
-import { abilitiesHTML } from '../data/abilities';
-import fs from 'node:fs';
 
-interface Ability {
-    id: number;
-    name: string;
-    description: string;
-}
+import fs from 'node:fs';
+import * as abilityRepository from '../repositories/ability.repository';
 
 export default () => {
     console.log('----------------------------------');
     console.log('--- Started Generate Abilities ---');
 
-    const abilities = getAbilities();
-    
+    const abilities = abilityRepository.getAbilities();
     const valuesText = abilities.map(({ id, name, description }) => {
         return `(${id}, '${name}', '${description}')`
     }).join(',\n');
@@ -27,35 +20,4 @@ export default () => {
     } catch(err) {
         console.error(err);
     }
-}
-
-const getAbilities = () => {
-    const $ = load(abilitiesHTML);
-    const abilities:Ability[] = [];
-    let id = 1;
-    $('tr').each((i, el) => {
-        const ability:Ability = { id, name: '', description: ''};
-        $(el)
-            .children()
-            .each((childIndex, childEl) => {
-                if (childIndex === 1) {
-                    ability.name = $(childEl).children('a')
-                        .text()
-                        .trim()
-                        .replace(/'/g, '\\\''); 
-                }
-                if (childIndex === 2) {
-                    const lines = $(childEl)
-                        .text()
-                        .replace(/'/gm, '\\\'')
-                        .replace(/"/gm, '\\"')
-                        .trim()
-                        .split(/(\r\n|\n|\r)/gm);
-                    ability.description = lines.map((line) => line.trim()).join('');
-                }
-            });
-        abilities.push(ability);
-        id++;
-    });
-    return abilities;
 }
