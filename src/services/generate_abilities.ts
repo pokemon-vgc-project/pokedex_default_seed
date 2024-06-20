@@ -3,6 +3,7 @@ import { abilitiesHTML } from '../data/abilities';
 import fs from 'node:fs';
 
 interface Ability {
+    id: number;
     name: string;
     description: string;
 }
@@ -13,11 +14,11 @@ export default () => {
 
     const abilities = getAbilities();
     
-    const valuesText = abilities.map(({ name, description }) => {
-        return `('${name}', '${description}')`
+    const valuesText = abilities.map(({ id, name, description }) => {
+        return `(${id}, '${name}', '${description}')`
     }).join(',\n');
 
-    const query = `INSERT INTO abilities (name, description)\nVALUES\n${valuesText};
+    const query = `INSERT INTO abilities (id, name, description)\nVALUES\n${valuesText};
     `;
     try {
         fs.writeFileSync('./files/abilities.sql', query);
@@ -31,8 +32,9 @@ export default () => {
 const getAbilities = () => {
     const $ = load(abilitiesHTML);
     const abilities:Ability[] = [];
+    let id = 1;
     $('tr').each((i, el) => {
-        const ability:Ability = { name: '', description: ''};
+        const ability:Ability = { id, name: '', description: ''};
         $(el)
             .children()
             .each((childIndex, childEl) => {
@@ -53,6 +55,7 @@ const getAbilities = () => {
                 }
             });
         abilities.push(ability);
+        id++;
     });
     return abilities;
 }
