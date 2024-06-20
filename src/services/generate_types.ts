@@ -1,10 +1,6 @@
-import { typeChart, pkmTypes } from '../data/typechart';
 import fs from 'node:fs';
-
-interface Type {
-    id: number;
-    name: string;
-}
+import { pkmTypes } from '../data/typechart';
+import { Type, getTypeMap, getTypes, getDamageTakenByType } from '../repositories/type.repository';
 
 export default () => {
     console.log('----------------------------------');
@@ -34,19 +30,6 @@ export default () => {
     }
 }
 
-const getTypes = ():Type[] => {
-    const types: Type[] = [];
-    let index = 1;
-    for (const type in typeChart) {
-        types.push({
-            id: index,
-            name: type,
-        });
-        index++;
-    }
-    return types;
-}
-
 const createTypesSql = (types: Type[]):string => {
     const valuesText = types.map(({ id, name }) => {
         const typeName = `${name.charAt(0).toUpperCase()}${name.slice(1)}`
@@ -57,8 +40,7 @@ const createTypesSql = (types: Type[]):string => {
 
 
 const createTypesStabsSql = (types: Type[]):string => {
-    const typeMap = new Map();
-    types.forEach((type) => typeMap.set(type.name.toLocaleLowerCase(), type.id));
+    const typeMap = getTypeMap();
 
     const valuesText = types
         .map((type) => createTypeStabsSql(type, typeMap))
@@ -68,8 +50,7 @@ const createTypesStabsSql = (types: Type[]):string => {
 }
 
 const createTypeStabsSql = (type: Type, typeMap: Map<pkmTypes, number>):string[] => {
-    const typeKey = type.name.toLocaleLowerCase() as pkmTypes;
-    const damageTaken = typeChart[typeKey]?.damageTaken ?? {};
+    const damageTaken = getDamageTakenByType(type);
     const values = [];
     for (const key in damageTaken) {
         if (Object.prototype.hasOwnProperty.call(damageTaken, key)) {

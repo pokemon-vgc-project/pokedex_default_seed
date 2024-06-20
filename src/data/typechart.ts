@@ -1,4 +1,4 @@
-interface DamageTaken {
+export interface DamageTaken {
     bug: number;
     dark: number;
     dragon: number;
