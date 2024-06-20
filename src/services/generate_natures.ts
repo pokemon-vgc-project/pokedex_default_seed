@@ -1,16 +1,17 @@
-import { natures } from '../data/natures';
+import * as natureRepository from '../repositories/nature.repository'
 import fs from 'node:fs';
 
 export default () => {
     console.log('----------------------------------');
     console.log('--- Started Generate Natures ---');
-    const valuesText = natures.map((nature) => {
+    const valuesText = natureRepository.getNatures().map((nature) => {
+        const id = nature.id;
         const name = nature.name;
         const increase = nature.increase ? `'${nature.increase}'` : 'NULL';
         const decrease = nature.decrease ? `'${nature.decrease}'` : 'NULL';
-        return `('${name}', ${increase}, ${decrease})`
+        return `(${id}, '${name}', ${increase}, ${decrease})`
     }).join(',\n');
-    const query = `INSERT INTO natures (name, increase, decrease)\nVALUES\n${valuesText};
+    const query = `INSERT INTO natures (id, name, increase, decrease)\nVALUES\n${valuesText};
     `;
     try {
         fs.writeFileSync('./files/natures.sql', query);
