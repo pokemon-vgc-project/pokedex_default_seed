@@ -1,7 +1,7 @@
 import { pokedex, SpeciesData, BaseStats } from '../data/pokedex';
 import { Ability, getAbilityMap } from './ability.repository';
 
-interface Pokemon {
+export interface Pokemon {
     id: number;
     num: number;
     baseSpeciesId?: number;
@@ -11,6 +11,8 @@ interface Pokemon {
     weightkg?: number;
     baseStats: BaseStats;
     abilities: PokemonAbility[];
+    evoLevel?: number;
+    evolutions?: number[]; 
 }
 
 interface PokemonAbility {
@@ -18,15 +20,16 @@ interface PokemonAbility {
     type?: 'HIDDEN' | 'SPECIAL'
 }
 
-interface PokemonTemp extends Omit<Pokemon, 'baseSpeciesId'> {
+interface PokemonTemp extends Omit<Pokemon, 'baseSpeciesId' | 'evolutions'> {
     baseSpecies?: string;
+    evolutions?: string[];
 }
 
 export const getPokemons = ():Pokemon[] => {
     const abilityMap = getAbilityMap();
     const pokemonMap = new Map<string, PokemonTemp>();
     const pokemonsTempList: PokemonTemp[] = getDefaultPokedex()
-        .map(({ num, name, heightm, weightkg, baseSpecies, baseStats, abilities }, i) => {
+        .map(({ num, name, heightm, weightkg, baseSpecies, baseStats, abilities, evoLevel, evos }, i) => {
             const pokemon:PokemonTemp = {
                 id: i + 1,
                 num,
@@ -36,6 +39,8 @@ export const getPokemons = ():Pokemon[] => {
                 baseStats, 
                 baseSpecies: baseSpecies,
                 abilities: getPokemonAbilities(abilities, abilityMap),
+                evoLevel,
+                evolutions: evos,
             };
 
             pokemonMap.set(name, pokemon);
@@ -43,7 +48,7 @@ export const getPokemons = ():Pokemon[] => {
         });
 
     const pokemons = pokemonsTempList.map((temp) => {
-        const { baseSpecies, ...pokemonData } = temp;
+        const { baseSpecies, evolutions, ...pokemonData } = temp;
         let baseSpeciesId;
         if (baseSpecies) {
             const basePkm = pokemonMap.get(baseSpecies);
@@ -54,9 +59,15 @@ export const getPokemons = ():Pokemon[] => {
                 throw new Error(`Not found the base pkm for ${temp.name}`);
             }
         }
+
+        const pokemonEvolutions = Array.isArray(evolutions) && evolutions.length
+            ? getPokemonEvolutions(temp, evolutions, pokemonMap)
+            : undefined;
+
         const pokemon: Pokemon = {
             ...pokemonData,
             baseSpeciesId: baseSpeciesId,
+            evolutions: pokemonEvolutions,
         };
         return pokemon;
     });
@@ -111,4 +122,21 @@ const getPokemonAbilities = (
         }
 
         return pokemonAbilities;
+}
+
+const getPokemonEvolutions = (pkm:PokemonTemp, evolutions: string[], pkmTempMap: Map<string, PokemonTemp>): number[] | undefined => {
+    const pkmEvolutions: number[] = evolutions.reduce<number[]>((acc, evolution) => {
+        const pokemon = pkmTempMap.get(evolution);
+
+        if (!pokemon) {
+            console.log(pkm);
+            console.log(evolution);
+            throw new Error(`Not found the evolution ${evolution}`);
+        }
+
+        acc.push(pokemon.id);
+        return acc;
+    }, []);
+
+    return pkmEvolutions.length ? pkmEvolutions : undefined;
 }
