@@ -1,5 +1,7 @@
 import { pokedex, SpeciesData, BaseStats } from '../data/pokedex';
+import { pkmTypes } from '../data/typechart';
 import { Ability, getAbilityMap } from './ability.repository';
+import { getTypeMap } from './type.repository';
 
 export interface Pokemon {
     id: number;
@@ -12,7 +14,8 @@ export interface Pokemon {
     baseStats: BaseStats;
     abilities: PokemonAbility[];
     evoLevel?: number;
-    evolutions?: number[]; 
+    evolutions?: number[];
+    types: number[];
 }
 
 interface PokemonAbility {
@@ -20,16 +23,19 @@ interface PokemonAbility {
     type?: 'HIDDEN' | 'SPECIAL'
 }
 
-interface PokemonTemp extends Omit<Pokemon, 'baseSpeciesId' | 'evolutions'> {
+interface PokemonTemp extends Omit<Pokemon, 'baseSpeciesId' | 'evolutions' | 'types'> {
     baseSpecies?: string;
     evolutions?: string[];
+    types: string[];
 }
 
 export const getPokemons = ():Pokemon[] => {
     const abilityMap = getAbilityMap();
+    const typeMap = getTypeMap();
     const pokemonMap = new Map<string, PokemonTemp>();
+
     const pokemonsTempList: PokemonTemp[] = getDefaultPokedex()
-        .map(({ num, name, heightm, weightkg, baseSpecies, baseStats, abilities, evoLevel, evos }, i) => {
+        .map(({ num, name, heightm, weightkg, baseSpecies, baseStats, abilities, evoLevel, evos, forme, types }, i) => {
             const pokemon:PokemonTemp = {
                 id: i + 1,
                 num,
@@ -37,6 +43,8 @@ export const getPokemons = ():Pokemon[] => {
                 heightm,
                 weightkg,
                 baseStats, 
+                forme,
+                types,
                 baseSpecies: baseSpecies,
                 abilities: getPokemonAbilities(abilities, abilityMap),
                 evoLevel,
@@ -64,10 +72,13 @@ export const getPokemons = ():Pokemon[] => {
             ? getPokemonEvolutions(temp, evolutions, pokemonMap)
             : undefined;
 
+        const pkmTypes = getPokemonTypes(temp, typeMap);
+
         const pokemon: Pokemon = {
             ...pokemonData,
             baseSpeciesId: baseSpeciesId,
             evolutions: pokemonEvolutions,
+            types: pkmTypes,
         };
         return pokemon;
     });
@@ -139,4 +150,17 @@ const getPokemonEvolutions = (pkm:PokemonTemp, evolutions: string[], pkmTempMap:
     }, []);
 
     return pkmEvolutions.length ? pkmEvolutions : undefined;
+}
+
+const getPokemonTypes = (pkm:PokemonTemp, typeMap:Map<pkmTypes, number>): number[] => {
+    return pkm.types.map((typeStr) => {
+        const typeId = typeMap.get(typeStr.toLowerCase() as pkmTypes);
+
+        if (!typeId) {
+            console.log(pkm);
+            console.log(typeStr);
+            throw new Error(`Not found the ${typeStr} type`);
+        }
+        return typeId;
+    });
 }
