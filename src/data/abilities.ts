@@ -2976,7 +2976,7 @@ export const abilitiesHTML = `
     <tr>
         <td>266
         </td>
-        <td><a href="/wiki/As_One_(Ability)" title="As One (Ability)">As One</a>
+        <td><a href="/wiki/As_One_(Ability)" title="As One (Ability)">As One (Glastrier)</a>
         </td>
         <td class="l">This Ability combines the effects of both Calyrex's Unnerve Ability and Glastrier's Chilling Neigh
             Ability.
@@ -2988,7 +2988,7 @@ export const abilitiesHTML = `
     <tr>
         <td>267
         </td>
-        <td><a href="/wiki/As_One_(Ability)" title="As One (Ability)">As One</a>
+        <td><a href="/wiki/As_One_(Ability)" title="As One (Ability)">As One (Spectrier)</a>
         </td>
         <td class="l">This Ability combines the effects of both Calyrex's Unnerve Ability and Spectrier's Grim Neigh
             Ability.
@@ -3385,7 +3385,7 @@ export const abilitiesHTML = `
     <tr>
         <td>301
         </td>
-        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect</a>
+        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect (Teal)</a>
         </td>
         <td class="l">The Pokémon's heart fills with memories, causing the Teal Mask to shine and the Pokémon's Speed
             stat to be boosted.
@@ -3397,7 +3397,7 @@ export const abilitiesHTML = `
     <tr>
         <td>302
         </td>
-        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect</a>
+        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect (Hearthflame)</a>
         </td>
         <td class="l">The Pokémon's heart fills with memories, causing the Hearthflame Mask to shine and the Pokémon's
             Attack stat to be boosted.
@@ -3409,7 +3409,7 @@ export const abilitiesHTML = `
     <tr>
         <td>303
         </td>
-        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect</a>
+        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect (Wellspring)</a>
         </td>
         <td class="l">The Pokémon's heart fills with memories, causing the Wellspring Mask to shine and the Pokémon's
             Sp. Def stat to be boosted.
@@ -3421,7 +3421,7 @@ export const abilitiesHTML = `
     <tr>
         <td>304
         </td>
-        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect</a>
+        <td><a href="/wiki/Embody_Aspect_(Ability)" title="Embody Aspect (Ability)">Embody Aspect (Cornerstone)</a>
         </td>
         <td class="l">The Pokémon's heart fills with memories, causing the Cornerstone Mask to shine and the Pokémon's
             Defense stat to be boosted.

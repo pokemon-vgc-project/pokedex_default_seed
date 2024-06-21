@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { abilitiesHTML } from '../data/abilities';
 
-interface Ability {
+export interface Ability {
     id: number;
     name: string;
     description: string;
@@ -36,4 +36,10 @@ export const getAbilities = () => {
         id++;
     });
     return abilities;
+}
+
+export const getAbilityMap = (): Map<string, Ability> => {
+    const map = new Map<string, Ability>();
+    getAbilities().forEach((ability) => map.set(ability.name, ability));
+    return map;
 }

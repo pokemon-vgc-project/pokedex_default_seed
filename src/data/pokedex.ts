@@ -1,4 +1,4 @@
-type BaseStats = {
+export type BaseStats = {
 	[k in 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe']: number;
 }
 
